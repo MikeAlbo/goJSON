@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 // marshall data from a go into a json file
 
 // generate a user id
@@ -12,3 +14,10 @@ package main
 
 // ** simple questions, no validation required -- all inputs are strings**
 
+func ReadDataFromFile()  {
+	fmt.Println("reading from file...")
+}
+
+func WriteDataToFile()  {
+	fmt.Println("writing to file...")
+}
