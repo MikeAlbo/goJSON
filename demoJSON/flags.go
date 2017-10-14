@@ -26,7 +26,7 @@ func InitCLI(){
 	default:
 		invalidCase()
 	}
-	
+
 
 }
 
