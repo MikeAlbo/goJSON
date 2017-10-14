@@ -44,9 +44,7 @@ func PromptUser() []string {
 	for _,q := range questions {
 		fmt.Println(q.text)
 		a, err := activateScanner()
-		if err != nil {
-			panic(err)
-		}
+		ExitIfError(err)
 		answers = append(answers,a)
 	}
 	return answers

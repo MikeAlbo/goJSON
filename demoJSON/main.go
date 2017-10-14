@@ -1,29 +1,32 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 func main()  {
-
 InitCLI()
 }
 
 
 func ReadDataFromFile()  {
 	fmt.Println("reading from file...")
-	data, err := ReadFromJSON("../demoData1.json")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(string(data))
+	s, err := ReadFromJSON("../demoData1.json")
+	ExitIfError(err)
+	fmt.Println(string(s))
 }
 
 func WriteDataToFile()  {
 	fmt.Println("writing to file...")
-	answers := PromptUser()
-	x := BuildStruct(answers)
-	if err := WriteToJSON(x); err != nil {
-		panic(err)
-	}
+	userInput := ProcessInputData(PromptUser())
+	WriteToJSON(userInput)
 
 }
 
+func ExitIfError(err error)  {
+	if err != nil {
+		fmt.Errorf(err.Error())
+		os.Exit(1)
+	}
+}
