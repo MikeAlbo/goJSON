@@ -8,11 +8,11 @@ import (
 
 
 // method call to write the json to the file
-func WriteToJSON(data map[string]MemberInfo) error  {
+func WriteToJSON(data Payload) error  {
 	fileData, err := loadData("../demoData1.json")
 	ExitIfError(err)
 
-	var compositeData []map[string]MemberInfo
+	var compositeData []Payload
 
 	err = json.Unmarshal(*fileData, &compositeData)
 	ExitIfError(err)
@@ -35,6 +35,20 @@ func ReadFromJSON(filePath string) ([]byte, error)  {
 		return nil, err
 	}
 	return *raw, nil
+}
+
+// unmarshal data into data structs and return them 
+func ConvertRawDataIntoStruct(value string)([]Payload, error)  {
+
+	// load raw data
+	raw, err := loadData("../demoData1.json")
+	ExitIfError(err)
+
+	var p []Payload
+	if err := json.Unmarshal(*raw, &p); err != nil {
+		return nil, err
+	}
+	return p, nil
 }
 
 // load the data from the file

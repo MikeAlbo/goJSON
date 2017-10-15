@@ -19,7 +19,7 @@ func ReadDataFromFile()  {
 
 func WriteDataToFile()  {
 	fmt.Println("writing to file...")
-	userInput := ProcessInputData(PromptUser())
+	userInput := ProcessInputData(PromptUser(getAddInfoQuestions()))
 	WriteToJSON(userInput)
 
 }
