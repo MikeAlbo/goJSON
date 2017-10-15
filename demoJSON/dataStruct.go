@@ -2,6 +2,7 @@ package main
 
 // define the type struct for MemberInfo
 // define the type struct for Payload
+//
 // Method call to build out the database entry
 // Method Call to build out the payload
 
@@ -18,6 +19,10 @@ type MemberInfo struct {
 	ZipCode string `json:"zip_code"`
 }
 
+// define the Payload type
+type Payload map[string]MemberInfo
+
+// build the member info struct and returns it
 func buildMemberInfoStruct(userInput []string, id string) MemberInfo  {
 	var a = &MemberInfo{
 		Id:id,
@@ -31,20 +36,22 @@ func buildMemberInfoStruct(userInput []string, id string) MemberInfo  {
 	return *a
 }
 
-
-func buildPayload(mi MemberInfo, uid string) map[string]MemberInfo  {
+// build out the payload to be added to the file, including the id.
+func buildPayload(mi MemberInfo, uid string) Payload  {
 	p := make(map[string]MemberInfo)
 	p[uid] = mi
 	return p
 }
 
+// generates a unique id and returns it as a string
 func newId() string {
 	id, err := NewUUID()
 	ExitIfError(err)
 	return id
 }
 
-func ProcessInputData(input []string) map[string]MemberInfo {
+// takes in a slice of strings from the input and builds out the payload, returning it
+func ProcessInputData(input []string) Payload {
 	entryId := newId()
 	memberStruct := buildMemberInfoStruct(input, entryId)
 	return buildPayload(memberStruct, entryId)

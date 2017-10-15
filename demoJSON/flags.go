@@ -10,6 +10,7 @@ import (
 
 var read = flag.Bool("read", false, "Read the database file")
 var write = flag.Bool("write", false, "Add an Item to the database file")
+var search = flag.Bool("search", false, "Search for a name in the database")
 
 func InitCLI(){
 
@@ -23,6 +24,7 @@ func InitCLI(){
 	switch {
 	case *read: ReadDataFromFile()
 	case *write: WriteDataToFile()
+	case *search: SearchInsideFile()
 	default:
 		invalidCase()
 	}
