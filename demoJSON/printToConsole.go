@@ -22,3 +22,10 @@ func PrintResults(sliceOfMemberInfo []MemberInfo){
 
 
 }
+
+// print a status message to the user
+func PrintStatusMessage(message string)  {
+	fmt.Println("\n---------------------------")
+	fmt.Println(message)
+	fmt.Println("\n---------------------------")
+}

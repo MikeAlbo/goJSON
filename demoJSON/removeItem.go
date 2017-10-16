@@ -1,5 +1,11 @@
 package main
 
+import (
+	"os"
+	"fmt"
+	"strings"
+)
+
 // removeItem contains the methods needed to remove an item from the database
 // will call the search functions
 // will take the results fo the search functions
@@ -12,6 +18,49 @@ package main
 
 // *** there may be a Delete function
 
+// Delete Item from File handles the method call from the cli
 func DeleteItemFromFile()  {
-	
+	if ok := isThirdArgument(); ok {
+		DeleteItem(getPayload(), os.Args[2:])
+	} else {
+		DeleteItem(getPayload(), promptUserForDelete())
+	}
+}
+
+func getPayload() *[]Payload {
+	payload, err := ConvertRawDataIntoStruct()
+	ExitIfError(err)
+	return &payload
+}
+
+func DeleteItem(payload *[]Payload, args []string){
+
+	filteredResults := filterPayload(*payload, args)
+	if ok := isSingleValue(filteredResults); ok {
+		if ok := confirmDelete(filteredResults[0]); ok {
+			fmt.Println("demo: deleted item")
+		}
+	} else {
+		DeleteItem(payload, promptUserForDelete())
+	}
+}
+
+// Delete handles the loading and parsing of the data from the database
+func isSingleValue(filteredResults []MemberInfo) bool  {
+	if len(filteredResults) != 1  {
+		fmt.Printf("results returned: %v", len(filteredResults))
+		PrintStatusMessage("Please refine search")
+		PrintResults(filteredResults)
+		return false
+	}
+	return true
+}
+
+func promptUserForDelete() []string{
+	return PromptUser(getSearchQuestions())
+}
+
+func confirmDelete(filteredItem MemberInfo) bool  {
+	message := fmt.Sprintf("\nPlease confirm to delete %s %s from the database", filteredItem.FirstName, filteredItem.LastName)
+	return dangerConfirmPrompt(message, strings.ToLower(filteredItem.FirstName))
 }

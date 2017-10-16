@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"os"
 	"fmt"
+	"strings"
 )
 
 // prompt user issues a set of questions with multiple fields and keeps track of the user's responses
@@ -29,6 +30,32 @@ func getSearchQuestions() []Question  {
 	return []Question{{"Please enter a search term\n"}}
 }
 
+func getDeleteQuestion()[]Question  {
+	return []Question{{"Please enter a user to delete"}}
+}
+
+func confirmPrompt(message string) bool {
+	fmt.Printf("%s\nPlease enter \"yes\" or \"y\" to confirm",message)
+	resp, err := activateScanner()
+	ExitIfError(err)
+	switch strings.ToLower(resp) {
+	case "y": return true
+	case "yes": return true
+	default:
+		return false
+	}
+}
+
+func dangerConfirmPrompt(message string, value string) bool {
+	fmt.Printf("%s\nPlease enter: \"delete %s\" to confirm\n",message, value)
+	resp, err := activateScanner()
+	ExitIfError(err)
+	if resp != `delete ` + value {
+		return false
+	}
+	return true
+}
+
 func activateScanner() (string, error)  {
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan(){
@@ -49,7 +76,11 @@ func PromptUser(questions[]Question) []string {
 		fmt.Println(q.text)
 		a, err := activateScanner()
 		ExitIfError(err)
-		answers = append(answers,a)
+		splitAns := strings.Split(a, " ")
+		for _, s := range splitAns {
+			answers = append(answers,s)
+		}
+
 	}
 	return answers
 }
