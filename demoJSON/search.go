@@ -25,8 +25,7 @@ func SearchInsideFile()  {
 		returnedValue = Search(searchAnswers[0])
 	}
 
-
-	fmt.Println(returnedValue)
+	PrintResults(returnedValue)
 	} // search inside file
 
 // check to see if there is a third argument
@@ -68,4 +67,6 @@ func filterPayload(payload []Payload, searchValue string) []MemberInfo {
 
 	return filteredValues
 }
+
+
 
