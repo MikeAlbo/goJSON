@@ -6,11 +6,19 @@ import "fmt"
 
 // print the results of search --- specific for memberInfo
 func PrintResults(sliceOfMemberInfo []MemberInfo){
-	fmt.Println("\n---------------- results ----------------")
-	fmt.Println("\nMember(s):")
-	for _, result := range sliceOfMemberInfo {
-		fmt.Printf("\n%s %s \n%s, \n%s %s %s\n", result.FirstName, result.LastName, result.Address, result.City, result.State, result.ZipCode)
-		fmt.Println("\n---------------------------")
+
+
+	if len(sliceOfMemberInfo) >= 1 {
+		fmt.Println("\n---------------- results ----------------")
+		fmt.Println("\nMember(s):")
+		for _, result := range sliceOfMemberInfo {
+			fmt.Printf("\n%s %s \n%s, \n%s %s %s\n", result.FirstName, result.LastName, result.Address, result.City, result.State, result.ZipCode)
+			fmt.Println("\n---------------------------")
+		}
+		fmt.Println("\n---------------- end ----------------")
+	} else {
+		fmt.Println("\n---------------- no results!! ----------------")
 	}
-	fmt.Println("\n---------------- end ----------------")
+
+
 }
