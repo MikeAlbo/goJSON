@@ -38,7 +38,7 @@ func ReadFromJSON(filePath string) ([]byte, error)  {
 }
 
 // unmarshal data into data structs and return them 
-func ConvertRawDataIntoStruct(value string)([]Payload, error)  {
+func ConvertRawDataIntoStruct()([]Payload, error)  {
 
 	// load raw data
 	raw, err := loadData("../demoData1.json")

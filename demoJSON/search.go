@@ -19,10 +19,10 @@ func SearchInsideFile()  {
 	fmt.Println("Search inside file")
 	var returnedValue []MemberInfo
 	if ok := isThirdArgument(); ok {
-		returnedValue = Search(os.Args[2])
+		returnedValue = Search(os.Args[2:])
 	} else {
 		searchAnswers := PromptUser(getSearchQuestions())
-		returnedValue = Search(searchAnswers[0])
+		returnedValue = Search(searchAnswers)
 	}
 
 	PrintResults(returnedValue)
@@ -37,9 +37,9 @@ func isThirdArgument() bool  {
 }
 
 // search functions
-func Search(value string) []MemberInfo {
+func Search(value []string) []MemberInfo {
 	// unmarshal the data into structs
-	payload, err := ConvertRawDataIntoStruct(value)
+	payload, err := ConvertRawDataIntoStruct()
 	ExitIfError(err)
 	results := filterPayload(payload, value)
 
@@ -50,22 +50,36 @@ func Search(value string) []MemberInfo {
 // for each payload, extract the memberInfo
 // for each field in the memberInfo, search for value
 // if value is found, return the whole memberInfo object
-func filterPayload(payload []Payload, searchValue string) []MemberInfo {
+func filterPayload(payload []Payload, searchValue []string) []MemberInfo {
 
-	var filteredValues []MemberInfo
+	var preFilteredValues []MemberInfo
+	var secondaryFilteredValues []MemberInfo
 
-	for _, p := range payload {
-		for _, mi := range p {
-			v := reflect.ValueOf(mi)
-			for i := 0; i < v.NumField(); i++ {
-				if searchValue == v.Field(i).Interface(){
-					filteredValues = append(filteredValues, mi)
+		for _, p := range payload {
+			for _, mi := range p {
+				v := reflect.ValueOf(mi)
+				for i := 0; i < v.NumField(); i++ {
+					if searchValue[0] == v.Field(i).Interface(){
+						preFilteredValues = append(preFilteredValues, mi)
+					}
 				}
 			}
 		}
-	}
+		if len(searchValue) > 1 {
+			for _, sv := range searchValue[1:]{
+				for _, preFilteredValue := range preFilteredValues {
+					v := reflect.ValueOf(preFilteredValue)
+					for i := 0; i < v.NumField(); i++ {
+						if sv == v.Field(i).Interface(){
+							secondaryFilteredValues = append(secondaryFilteredValues, preFilteredValue)
+						}
+					}
+				}
+			}
+			return secondaryFilteredValues
+		}
 
-	return filteredValues
+	return preFilteredValues
 }
 
 
