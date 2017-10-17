@@ -39,10 +39,28 @@ func DeleteItem(payload *[]Payload, args []string){
 	if ok := isSingleValue(filteredResults); ok {
 		if ok := confirmDelete(filteredResults[0]); ok {
 			fmt.Println("demo: deleted item")
+			updatedPayload := removeItemFromDataSet(payload, filteredResults[0].Id)
+			if ok := writeAllPayloadsToFile(updatedPayload); ok {
+				fmt.Println("database updated")
+			}
 		}
 	} else {
 		DeleteItem(payload, promptUserForDelete())
 	}
+}
+
+func removeItemFromDataSet(payload *[]Payload, itemId string) []Payload {
+	for i,p := range *payload {
+		for _, m := range p {
+			if m.Id == itemId {
+				pay := *payload
+				pay = append(pay[:i], pay[i + 1:]...)
+				return pay
+			}
+		}
+	}
+
+	return nil
 }
 
 // Delete handles the loading and parsing of the data from the database

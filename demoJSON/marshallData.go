@@ -28,6 +28,17 @@ func WriteToJSON(data Payload) error  {
 	return nil
 }
 
+// write a slice of Payloads to a file overwriting the entire content of the file
+func writeAllPayloadsToFile(payloads []Payload) bool  {
+	exportData, err := json.MarshalIndent(payloads, "", " ")
+	ExitIfError(err)
+
+	err = writeData("../demoData1.json", exportData)
+	ExitIfError(err)
+
+	return true
+}
+
 // method call to read the entire JSON object from the file
 func ReadFromJSON(filePath string) ([]byte, error)  {
 	raw, err := loadData(filePath)
